@@ -1,0 +1,14 @@
+E:\SIstemas_Ferreteria\SistemaFerreteria\bin\Debug\net10.0\SistemaFerreteria.exe
+E:\SIstemas_Ferreteria\SistemaFerreteria\bin\Debug\net10.0\SistemaFerreteria.deps.json
+E:\SIstemas_Ferreteria\SistemaFerreteria\bin\Debug\net10.0\SistemaFerreteria.runtimeconfig.json
+E:\SIstemas_Ferreteria\SistemaFerreteria\bin\Debug\net10.0\SistemaFerreteria.dll
+E:\SIstemas_Ferreteria\SistemaFerreteria\bin\Debug\net10.0\SistemaFerreteria.pdb
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\SistemaFerreteria.GeneratedMSBuildEditorConfig.editorconfig
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\SistemaFerreteria.AssemblyInfoInputs.cache
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\SistemaFerreteria.AssemblyInfo.cs
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\SistemaFerreteria.csproj.CoreCompileInputs.cache
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\SistemaFerreteria.dll
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\refint\SistemaFerreteria.dll
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\SistemaFerreteria.pdb
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\SistemaFerreteria.genruntimeconfig.cache
+E:\SIstemas_Ferreteria\SistemaFerreteria\obj\Debug\net10.0\ref\SistemaFerreteria.dll
