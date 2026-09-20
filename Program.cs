@@ -1,20 +1,29 @@
-﻿class SistemaFerreteria
+﻿class Sistema 
 {
+
     static void Main(string[] args)
-    {   
-   
+    {
+       
+        
         {
             
             Console.WriteLine("=========================================");
             Console.WriteLine("   SISTEMA DE GESTION - FERRETERIA       ");
             Console.WriteLine("=========================================");
-        }
+            Console.WriteLine("1- Modulo de Gestion de Clientes");
+            Console.WriteLine("2- Modulo de Gestion de Inventario");
+            Console.WriteLine("3- Modulo de Tramites y Pedidos");
+            Console.WriteLine("4- Modulo de Reportes y Consultas");
+            Console.WriteLine("5- Salir del Sistema");
+
+            Console.Write("\nSeleccione una opcion (1-5): ");
+
+         }
     }
     
+
+
 }
-
-
-
 
 
 
