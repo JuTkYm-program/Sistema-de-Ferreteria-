@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SistemaFerreteria")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+611c8963ca885aeda929b914face9f6eb5f0dbe1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e57cc068b3413a7499d54aaf5ec790a700117b29")]
 [assembly: System.Reflection.AssemblyProductAttribute("SistemaFerreteria")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SistemaFerreteria")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
