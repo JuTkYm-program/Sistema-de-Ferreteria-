@@ -104,7 +104,7 @@ class Sistema
             tipoDoc= Console.ReadLine();
         }
 
-        // documentos
+        
 
         string Documento ="";
         bool docValido= false ;
@@ -123,8 +123,19 @@ class Sistema
                  docValido=Documento.Length== 11 && EsNumerico(Documento);
                 if (!docValido) System.Console.WriteLine("RUC Invalido, debe tener 11 digitos");
             }
-        }
-
+        } while (!docValido); // faltaba el while
+        
+        //TELEFONOS
+        string telefono;
+        bool telefonoValido;
+        do
+        {
+            System.Console.WriteLine("ingrese telefono (9 digitos)");
+            telefono=Console.ReadLine();
+            telefonoValido= telefono.Length==9 && EsNumerico(telefono);
+            if (!telefonoValido) 
+            System.Console.WriteLine("telefono invalido. debe tener 9 digitos");
+        } while (!telefonoValido);
 
 
 
