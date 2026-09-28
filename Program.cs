@@ -2,6 +2,18 @@
 
 class Sistema 
 {
+    // DECLARAMOS LAS VARIABLES GLOBALES Y LOS ARREGLOS 
+    // PARA MODULO DE CLIENTES 
+    const int CAPACIDAD_MAXIMA = 100;
+
+    static string[] clientesDni = new string[CAPACIDAD_MAXIMA];
+    static string[] clientesRuc = new string[CAPACIDAD_MAXIMA];
+    static string[] clientesTelefono = new string[CAPACIDAD_MAXIMA];
+    static string[] clientesNombre = new string[CAPACIDAD_MAXIMA];
+    
+    // Contador global en 0 y va subiendo con cada registro
+    static int totalClientes = 0;
+
     static void Main(string[] args)
     {
       bool Salir = false;
@@ -75,8 +87,8 @@ class Sistema
 
     static void RegistrarCliente()
     {
-        System.Console.WriteLine();
-        Console.ReadKey();
+        System.Console.WriteLine("---REGISTRAR CLIENTE---");
+        
     }
 
     static void VerClientes()
