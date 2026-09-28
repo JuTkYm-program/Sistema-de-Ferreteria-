@@ -123,9 +123,9 @@ class Sistema
                  docValido=Documento.Length== 11 && EsNumerico(Documento);
                 if (!docValido) System.Console.WriteLine("RUC Invalido, debe tener 11 digitos");
             }
-        } while (!docValido); // faltaba el while
+        } while (!docValido); 
         
-        //TELEFONOS
+        
         string telefono;
         bool telefonoValido;
         do
@@ -136,8 +136,30 @@ class Sistema
             if (!telefonoValido) 
             System.Console.WriteLine("telefono invalido. debe tener 9 digitos");
         } while (!telefonoValido);
+        
 
-
+        
+        // REGISTRAR NOMBRE 
+        System.Console.WriteLine("Ingrese el nombre del cliente:");
+        string nombre = Console.ReadLine();
+        // Guardad segun si es dni o ruc
+        if (tipoDoc=="1")
+        {
+            clientesDni[totalClientes]=Documento;
+            clientesRuc[totalClientes]="-"; 
+        }
+        else
+        {
+            clientesRuc[totalClientes]=Documento;
+            clientesDni[totalClientes]="-"; 
+        }
+        clientesTelefono[totalClientes]=telefono;
+        clientesNombre[totalClientes]=nombre;
+        totalClientes++;
+        
+        System.Console.WriteLine("Cliente resistrado correctamente");
+        System.Console.WriteLine($"total de clientes:{totalClientes}");
+        Console.ReadKey();
 
     }
     
