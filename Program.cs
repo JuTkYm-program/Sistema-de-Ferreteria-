@@ -88,8 +88,48 @@ class Sistema
     static void RegistrarCliente()
     {
         System.Console.WriteLine("---REGISTRAR CLIENTE---");
-        
+        if (totalClientes >= CAPACIDAD_MAXIMA)
+    {
+        System.Console.WriteLine("No se pueden registrar más clientes (arreglo lleno).");
+        Console.ReadKey();
+        return;
     }
+        string tipoDoc ="";
+        while(tipoDoc != "1" && tipoDoc != "2")
+        {
+            System.Console.WriteLine("Que Documento desea regristar");
+            System.Console.WriteLine("1. DNI (8 DIGITOS)");
+            System.Console.WriteLine("2. RUC (11 DIGITOS)");
+            System.Console.WriteLine("Seleccione una opcion (1 o 2):");
+            tipoDoc= Console.ReadLine();
+        }
+
+        // documentos
+
+        string Documento ="";
+        bool docValido= false ;
+        do
+        {
+            System.Console.WriteLine("ingrese el numero de Documento");
+            Documento=Console.ReadLine();
+
+            if(tipoDoc =="1")
+            {
+                docValido=Documento.Length== 8 && EsNumerico(Documento);
+                if (!docValido) System.Console.WriteLine("DNI Invalido, debe tener 8 digitos");
+            }
+            else
+            {
+                 docValido=Documento.Length== 11 && EsNumerico(Documento);
+                if (!docValido) System.Console.WriteLine("RUC Invalido, debe tener 11 digitos");
+            }
+        }
+
+
+
+
+    }
+    
 
     static void VerClientes()
     {
@@ -229,6 +269,15 @@ static void SubmenuInventario()
         Console.WriteLine("\n[Funcion ResumenEstadistico - En desarrollo]");
         Console.ReadKey();
     }
+    static bool EsNumerico(string texto)
+    {
+     for (int i = 0; i < texto.Length; i++)
+     {
+        if (!char.IsDigit(texto[i])) return false;
+     }
+     return true;
+    }
+    
 
 
     
