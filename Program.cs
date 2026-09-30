@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.ComponentModel;
 
 class Sistema 
 {
@@ -166,7 +167,8 @@ class Sistema
 
     static void VerClientes()
     {
-        System.Console.WriteLine();
+        System.Console.WriteLine("LISTAS DE CLIENTES REGISTRADOS---");
+
         Console.ReadKey();
     }
 
