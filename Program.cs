@@ -168,7 +168,19 @@ class Sistema
     static void VerClientes()
     {
         System.Console.WriteLine("LISTAS DE CLIENTES REGISTRADOS---");
-
+        if (totalClientes==0)
+        {
+            System.Console.WriteLine("Aun no hay clientes registrados");
+            return;
+        }
+        System.Console.WriteLine("{0,-4} {1,-10} {2,-13} {3,-11} {4}", "N.", "DNI", "RUC", "Telefono", "Nombre");
+        System.Console.WriteLine(new string('-',60));
+        for (int i=0;i<totalClientes;i++)
+        {
+            System.Console.WriteLine("{0,-4} {1,-10} {2,-13} {3,-11} {4}",
+            i + 1, clientesDni[i], clientesRuc[i], clientesTelefono[i], clientesNombre[i]);
+        }
+        System.Console.WriteLine($"Total de clientes{totalClientes}");
         Console.ReadKey();
     }
 
