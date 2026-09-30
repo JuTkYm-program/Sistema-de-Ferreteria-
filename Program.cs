@@ -14,11 +14,10 @@ class Sistema
             Console.WriteLine("=========================================");
             Console.WriteLine("1- Modulo de Gestion de Clientes");
             Console.WriteLine("2- Modulo de Gestion de Inventario");
-            Console.WriteLine("3- Modulo de Tramites y Pedidos");
-            Console.WriteLine("4- Modulo de Reportes y Consultas");
-            Console.WriteLine("5- Salir del Sistema");
+            Console.WriteLine("3- Modulo de Solicitudes");
+            Console.WriteLine("4- Salir del Sistema");
 
-            Console.Write("\nSeleccione una opcion (1-5): ");
+            Console.Write("\nSeleccione una opcion (1-4): ");
             string opcion = Console.ReadLine();
 
             switch(opcion)
@@ -31,12 +30,9 @@ class Sistema
               SubmenuInventario();
                 break;
              case "3":
-              SubmenuPedidos();
+              SubmenuTramites();
                 break;
              case "4":
-              SubmenuReportes();
-                break;
-             case "5":
                 Salir=true;
                 System.Console.WriteLine("Saliendo del Sistema. Precione Cualquier Tecla...");
                 Console.ReadKey();
@@ -141,24 +137,28 @@ static void SubmenuInventario()
    
     // MODULO 3 TRAMITES y PEDIDOS 
    
-    static void SubmenuPedidos()
+     static void SubmenuTramites()
     {
-        Console.Clear();
-        Console.WriteLine("--- SUBMENU: TRAMITES Y PEDIDOS ---");
-        Console.WriteLine("1. Registrar Solicitud / Cargo");
-        Console.WriteLine("2. Ver Solicitudes Registradas");
-        Console.WriteLine("3. Buscar Solicitud por Codigo");
-        Console.WriteLine("4. Volver al Menu Principal");
-        Console.Write("Seleccione una opcion: ");
-        string op = Console.ReadLine();
-
-        switch (op)
-        {
-            case "1": RegistrarSolicitud(); break;
-            case "2": VerSolicitudes(); break;
-            case "3": BuscarSolicitudPorCodigo(); break;
-        }
+    Console.Clear();
+    Console.WriteLine("--- SUBMENU: SOLICITUDES ---");
+    Console.WriteLine("1. Registrar Solicitud");
+    Console.WriteLine("2. Ver Solicitudes Registradas");
+    Console.WriteLine("3. Buscar Solicitud por Codigo");
+    Console.WriteLine("4. Resumen de Solicitudes");
+    Console.WriteLine("5. Volver al Menu Principal");
+    Console.Write("Seleccione una opcion: ");
+    string op = Console.ReadLine();
+ 
+    switch (op)
+       { 
+        case "1": RegistrarSolicitud(); break;
+        case "2": VerSolicitudes(); break;
+        case "3": BuscarSolicitudPorCodigo(); break;
+        case "4": ResumenSolicitudes(); break;
+       }
     }
+ 
+// AGREGA esta funcion nueva debajo de BuscarSolicitudPorCodigo():
 
     static void RegistrarSolicitud()
     {
@@ -176,47 +176,15 @@ static void SubmenuInventario()
     {
         Console.WriteLine("\n[Funcion BuscarSolicitudPorCodigo - En desarrollo]");
         Console.ReadKey();
+    }  
+    static void ResumenSolicitudes()
+    {
+        Console.WriteLine("\n[Funcion ResumenSolicitudes - En desarrollo]");
+        Console.ReadKey();
     }
 
    
-    //MODULO 4 REPORTES Y ALGORITMOS 
-  
-    static void SubmenuReportes()
-    {
-        Console.Clear();
-        Console.WriteLine("--- SUBMENU: REPORTES Y CONSULTAS ---");
-        Console.WriteLine("1. Reporte de Productos con Stock Bajo");
-        Console.WriteLine("2. Ordenar Productos por Nombre (Alfabeticamente)");
-        Console.WriteLine("3. Resumen Estadistico del Sistema");
-        Console.WriteLine("4. Volver al Menu Principal");
-        Console.Write("Seleccione una opcion: ");
-        string op = Console.ReadLine();
-
-        switch (op)
-        {
-            case "1": ReporteProductosStockBajo(); break;
-            case "2": OrdenarProductosPorNombre(); break;
-            case "3": ResumenEstadistico(); break;
-        }
-    }
-
-    static void ReporteProductosStockBajo()
-    {
-        Console.WriteLine("\n[Funcion ReporteProductosStockBajo - En desarrollo]");
-        Console.ReadKey();
-    }
-
-    static void OrdenarProductosPorNombre()
-    {
-        Console.WriteLine("\n[Funcion OrdenarProductosPorNombre - En desarrollo]");
-        Console.ReadKey();
-    }
-
-    static void ResumenEstadistico()
-    {
-        Console.WriteLine("\n[Funcion ResumenEstadistico - En desarrollo]");
-        Console.ReadKey();
-    }
+   
 
 
     
