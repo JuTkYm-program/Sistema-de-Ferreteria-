@@ -2,6 +2,13 @@
 
 class Sistema 
 {
+    //Arreglos para el inventario
+    const int MAX_PRODUCTOS = 100;
+    static string[] codigosProd = new string[MAX_PRODUCTOS];
+    static string[] nombresProd = new string[MAX_PRODUCTOS];
+    static int[] stocksProd = new int[MAX_PRODUCTOS];
+    static double[] preciosProd = new double[MAX_PRODUCTOS];
+    static int totalProductos = 0;
     static void Main(string[] args)
     {
       bool Salir = false;
