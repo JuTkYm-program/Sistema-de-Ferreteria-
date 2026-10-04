@@ -119,8 +119,101 @@ static void SubmenuInventario()
 
     static void RegistrarProducto()
     {
-        Console.WriteLine("\n[Funcion RegistrarProducto - En desarrollo]");
-        Console.ReadKey();
+        Console.Clear();
+        Console.WriteLine("--------REGISTRAR PRODUCTO----------");
+        if (totalProductos==MAX_PRODUCTOS)
+        {
+            Console.WriteLine("\nEl inventario está lleno, no se puede registrar más.");
+        }
+        else
+        {
+            Console.Write("Codigo del producto(5 dígitos):");
+            string codigo =Console.ReadLine();
+
+            //Revisamos que el código solo contenga números
+            bool soloNumeros = true;
+            for (int i=0;i<codigo.Length;i++)
+            {
+                if (!char.IsDigit(codigo[i]))
+                {
+                    soloNumeros=false;
+                }
+            }
+            //Revisamos que el codigo del producto no se repita  
+            bool repetido = false;
+            for (int i=0;i<totalProductos;i++)
+            {
+                if (codigosProd[i]==codigo)
+                {
+                    repetido=true;
+                }
+            }
+            if (codigo.Length!=5 || !soloNumeros)
+            {
+                Console.WriteLine("\nEl codigo debe tener exactamente 5 digitos y solo numeros.");
+            }
+            else if (repetido)
+            {
+                Console.WriteLine("\nYa existe un producto con ese codigo.");
+        
+            }
+            else
+            {
+                Console.Write("Nombre del producto:");
+                string nombre=Console.ReadLine();
+                //Verificamos que el nombre solo tenga letras
+                 bool soloLetras=true;
+                 bool hayLetra=false;
+                 for (int j=0;j<nombre.Length;j++)
+                {
+                    if (char.IsLetter(nombre[j]))
+                    {
+                        hayLetra=true;
+                    }
+                    else if (nombre[j] != ' ')
+                    {
+                        soloLetras=false;
+                    }
+                }
+                if (!hayLetra||!soloLetras)
+                {
+                    Console.WriteLine("\nEl nombre debe tener solo letras y no puede estar vacío");
+                }
+                else
+                {
+                    Console.Write("Stock inicial:");
+                    string stockText=Console.ReadLine();
+                    Console.Write("Precio unitario:");
+                    string preciotext=Console.ReadLine();
+
+                    if (stockText=="" || preciotext == "")
+                    {
+                        Console.WriteLine("\nEscriba el precio y el stock del producto");
+                    }
+                    else
+                    {
+                        int stock=int.Parse(stockText);
+                        double precio=double.Parse(preciotext);
+
+                        if (stock<0|| precio<0)
+                        {
+                            Console.WriteLine("\nEl stock y el precio no pueden ser negativos");
+                        }
+                        else
+                        {
+                            codigosProd[totalProductos]=codigo;
+                            nombresProd[totalProductos]=nombre;
+                            stocksProd[totalProductos]=stock;
+                            preciosProd[totalProductos]=precio;
+                            totalProductos++;
+                            Console.WriteLine("\nProducto registrado correctamente.");
+                        }
+
+                    }
+                }
+            }
+
+        }
     }
 
     static void VerInventario()
