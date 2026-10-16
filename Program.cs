@@ -139,36 +139,150 @@ static void SubmenuInventario()
    
      static void SubmenuTramites()
     {
-    Console.Clear();
-    Console.WriteLine("--- SUBMENU: SOLICITUDES ---");
-    Console.WriteLine("1. Registrar Solicitud");
-    Console.WriteLine("2. Ver Solicitudes Registradas");
-    Console.WriteLine("3. Buscar Solicitud por Codigo");
-    Console.WriteLine("4. Resumen de Solicitudes");
-    Console.WriteLine("5. Volver al Menu Principal");
-    Console.Write("Seleccione una opcion: ");
-    string op = Console.ReadLine();
+        bool volver = false;
+
+        while (!volver)
+        {
+     Console.Clear();
+     Console.WriteLine("SUBMENU: SOLICITUDES");
+     Console.WriteLine("1. Registrar Solicitud");
+     Console.WriteLine("2. Ver Solicitudes Registradas");
+     Console.WriteLine("3. Buscar Solicitud por Codigo");
+     Console.WriteLine("4. Resumen de Solicitudes");
+     Console.WriteLine("5. Volver al Menu Principal");
+     Console.Write("Seleccione una opcion: ");
+     string op = Console.ReadLine();
  
-    switch (op)
+     switch (op)
        { 
         case "1": RegistrarSolicitud(); break;
         case "2": VerSolicitudes(); break;
         case "3": BuscarSolicitudPorCodigo(); break;
         case "4": ResumenSolicitudes(); break;
+        case "5": volver = true; break;
+        default:
+            Console.WriteLine("Opcion invalidad,Presione cualquier tecla");
+            Console.Readkey();
+            break;
        }
     }
- 
+}
 // AGREGA esta funcion nueva debajo de BuscarSolicitudPorCodigo():
-
-    static void RegistrarSolicitud()
+static void RegistrarSolicitud()
     {
-        Console.WriteLine("\n[Funcion RegistrarSolicitud - En desarrollo]");
+        Console.Clear();
+        Console.WriteLine("--- REGISTRAR NUEVA SOLICITUD ---");
+
+        if (totalSolicitudes >= 100)
+        {
+            Console.WriteLine("Error: Se ha alcanzado el límite máximo de solicitudes.");
+            Console.ReadKey();
+            return;
+        }
+
+        string codigoIngresado = "";
+        // Bucle para validar código no vacío y evitar duplicados
+        while (true)
+        {
+            Console.Write("Ingrese codigo de solicitud: ");
+            codigoIngresado = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrEmpty(codigoIngresado))
+            {
+                Console.WriteLine("Error: El código no puede estar vacío. Intente de nuevo.");
+                continue;
+            }
+
+            bool existe = false;
+            for (int i = 0; i < totalSolicitudes; i++)
+            {
+                if (codigos[i].Equals(codigoIngresado, StringComparison.OrdinalIgnoreCase))
+                {
+                    existe = true;
+                    break;
+                }
+            }
+
+            if (existe)
+            {
+                Console.WriteLine("Error: Ya existe una solicitud con ese código. Ingrese uno diferente.");
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        string documentoIngresado = "";
+        while (true)
+        {
+            Console.Write("Ingrese documento del cliente: ");
+            documentoIngresado = Console.ReadLine()?.Trim();
+
+            if (!string.IsNullOrEmpty(documentoIngresado)) break;
+            Console.WriteLine("Error: El documento no puede estar vacío.");
+        }
+
+        string detalleIngresado = "";
+        while (true)
+        {
+            Console.Write("Ingrese descripcion del producto/pedido: ");
+            detalleIngresado = Console.ReadLine()?.Trim();
+
+            if (!string.IsNullOrEmpty(detalleIngresado)) break;
+            Console.WriteLine("Error: La descripción no puede estar vacía.");
+        }
+
+        int cantidadIngresada = 0;
+        while (true)
+        {
+            Console.Write("Ingrese cantidad: ");
+            if (int.TryParse(Console.ReadLine(), out cantidadIngresada) && cantidadIngresada > 0)
+            {
+                break;
+            }
+            Console.WriteLine("Error: Ingrese un número entero válido mayor a 0.");
+        }
+
+        // Guardar en las posiciones del arreglo global
+        codigos[totalSolicitudes] = codigoIngresado;
+        documentos[totalSolicitudes] = documentoIngresado;
+        detalles[totalSolicitudes] = detalleIngresado;
+        cantidades[totalSolicitudes] = cantidadIngresada;
+        estados[totalSolicitudes] = "Pendiente";
+
+        totalSolicitudes++; // Aumentar contador
+
+        Console.WriteLine("\n¡Solicitud registrada con éxito!");
+        Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
 
     static void VerSolicitudes()
     {
-        Console.WriteLine("\n[Funcion VerSolicitudes - En desarrollo]");
+        Console.Clear();
+        Console.WriteLine("LISTA DE SOLICITUDES ");
+
+        if (listaSolicitudes.Count == 0)
+        {
+            Console.WriteLine("No hay solicitudes registradas todavía.");
+        }
+        else
+        {
+            int contador = 1;
+            foreach (var sol in listaSolicitudes)
+            {
+                Console.WriteLine($"[{contador}]");
+                Console.WriteLine($"  Codigo:   {sol.Codigo}");
+                Console.WriteLine($"  Cliente:  {sol.DocumentoCliente}");
+                Console.WriteLine($"  Detalle:  {sol.Detalle}");
+                Console.WriteLine($"  Cantidad: {sol.Cantidad}");
+                Console.WriteLine($"  Estado:   {sol.Estado}");
+                contador++;
+            }
+        }
+
+        Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
 
@@ -183,11 +297,7 @@ static void SubmenuInventario()
         Console.ReadKey();
     }
 
-   
-   
 
-
-    
 }
 
 
