@@ -22,34 +22,29 @@ class Sistema
        while(!Salir)
         {
             
-            Console.WriteLine("=========================================");
+           Console.WriteLine("=========================================");
             Console.WriteLine("   SISTEMA DE GESTION - FERRETERIA       ");
             Console.WriteLine("=========================================");
             Console.WriteLine("1- Modulo de Gestion de Clientes");
             Console.WriteLine("2- Modulo de Gestion de Inventario");
-            Console.WriteLine("3- Modulo de Tramites y Pedidos");
-            Console.WriteLine("4- Modulo de Reportes y Consultas");
-            Console.WriteLine("5- Salir del Sistema");
+            Console.WriteLine("3- Modulo de Solicitudes");
+            Console.WriteLine("4- Salir del Sistema");
 
-            Console.Write("\nSeleccione una opcion (1-5): ");
+            Console.Write("\nSeleccione una opcion (1-4): ");
             string opcion = Console.ReadLine();
 
-            switch(opcion)
+           switch(opcion)
             {
              case "1":
-              SubmenuClientes();
-                
+              SubmenuClientes();    
                 break;
              case "2":
               SubmenuInventario();
                 break;
              case "3":
-              SubmenuPedidos();
+              SubmenuTramites();
                 break;
              case "4":
-              SubmenuReportes();
-                break;
-             case "5":
                 Salir=true;
                 System.Console.WriteLine("Saliendo del Sistema. Precione Cualquier Tecla...");
                 Console.ReadKey();
@@ -58,7 +53,6 @@ class Sistema
                System.Console.WriteLine("Opcion invalida. Precione Cualquier Tecla...");
                 Console.ReadKey();
                 break;
-
 
             }
 
@@ -186,7 +180,46 @@ class Sistema
 
     static void BuscarClientes()
     {
-        System.Console.WriteLine("");
+        System.Console.WriteLine("--- BUSCAR CLIENTE POR DOCUMENTO ---");
+       
+        if (totalClientes == 0)
+        {
+            System.Console.WriteLine("Aun no hay clientes registrados.");
+            Console.ReadKey();
+            return;
+        }
+
+        System.Console.WriteLine("Ingrese DNI (8 digitos) o RUC (11 digitos): ");
+        string documento = Console.ReadLine();
+        
+        if (!EsNumerico(documento) || (documento.Length != 8 && documento.Length != 11))
+        {
+         System.Console.WriteLine("Documento invalido. Debe ser un DNI de 8 digitos o un RUC de 11.");
+         return;   
+        }
+
+        string[] arregloDondeBuscar = documento.Length == 8 ? clientesDni : clientesRuc;
+        int posicion = -1; 
+        for (int i = 0; i < totalClientes; i++)
+        {
+           if (arregloDondeBuscar[i] == documento)
+            {
+                posicion = i;
+                break;    
+            } 
+        }
+        if (posicion == -1)
+        {
+            System.Console.WriteLine("No se encontro ningun cliente con ese documento");
+        }
+        else
+        {
+            System.Console.WriteLine("Cliente encontrado:");
+            System.Console.WriteLine("DNI:      " + clientesDni[posicion]);
+            System.Console.WriteLine("RUC:      " + clientesRuc[posicion]);
+            System.Console.WriteLine("Telefono: " + clientesTelefono[posicion]);
+            System.Console.WriteLine("Nombre:   " + clientesNombre[posicion]);
+        }        
         Console.ReadKey();
     }
 
@@ -237,26 +270,27 @@ static void SubmenuInventario()
         Console.ReadKey();
     }
 
+     // MODULO 3 TRAMITES y PEDIDOS 
    
-    // MODULO 3 TRAMITES y PEDIDOS 
-   
-    static void SubmenuPedidos()
+     static void SubmenuTramites()
     {
-        Console.Clear();
-        Console.WriteLine("--- SUBMENU: TRAMITES Y PEDIDOS ---");
-        Console.WriteLine("1. Registrar Solicitud / Cargo");
-        Console.WriteLine("2. Ver Solicitudes Registradas");
-        Console.WriteLine("3. Buscar Solicitud por Codigo");
-        Console.WriteLine("4. Volver al Menu Principal");
-        Console.Write("Seleccione una opcion: ");
-        string op = Console.ReadLine();
-
-        switch (op)
-        {
-            case "1": RegistrarSolicitud(); break;
-            case "2": VerSolicitudes(); break;
-            case "3": BuscarSolicitudPorCodigo(); break;
-        }
+    Console.Clear();
+    Console.WriteLine("--- SUBMENU: SOLICITUDES ---");
+    Console.WriteLine("1. Registrar Solicitud");
+    Console.WriteLine("2. Ver Solicitudes Registradas");
+    Console.WriteLine("3. Buscar Solicitud por Codigo");
+    Console.WriteLine("4. Resumen de Solicitudes");
+    Console.WriteLine("5. Volver al Menu Principal");
+    Console.Write("Seleccione una opcion: ");
+    string op = Console.ReadLine();
+ 
+    switch (op)
+       { 
+        case "1": RegistrarSolicitud(); break;
+        case "2": VerSolicitudes(); break;
+        case "3": BuscarSolicitudPorCodigo(); break;
+        case "4": ResumenSolicitudes(); break;
+       }
     }
 
     static void RegistrarSolicitud()
@@ -275,47 +309,14 @@ static void SubmenuInventario()
     {
         Console.WriteLine("\n[Funcion BuscarSolicitudPorCodigo - En desarrollo]");
         Console.ReadKey();
+    }  
+    static void ResumenSolicitudes()
+    {
+        Console.WriteLine("\n[Funcion ResumenSolicitudes - En desarrollo]");
+        Console.ReadKey();
     }
 
    
-    //MODULO 4 REPORTES Y ALGORITMOS 
-  
-    static void SubmenuReportes()
-    {
-        Console.Clear();
-        Console.WriteLine("--- SUBMENU: REPORTES Y CONSULTAS ---");
-        Console.WriteLine("1. Reporte de Productos con Stock Bajo");
-        Console.WriteLine("2. Ordenar Productos por Nombre (Alfabeticamente)");
-        Console.WriteLine("3. Resumen Estadistico del Sistema");
-        Console.WriteLine("4. Volver al Menu Principal");
-        Console.Write("Seleccione una opcion: ");
-        string op = Console.ReadLine();
-
-        switch (op)
-        {
-            case "1": ReporteProductosStockBajo(); break;
-            case "2": OrdenarProductosPorNombre(); break;
-            case "3": ResumenEstadistico(); break;
-        }
-    }
-
-    static void ReporteProductosStockBajo()
-    {
-        Console.WriteLine("\n[Funcion ReporteProductosStockBajo - En desarrollo]");
-        Console.ReadKey();
-    }
-
-    static void OrdenarProductosPorNombre()
-    {
-        Console.WriteLine("\n[Funcion OrdenarProductosPorNombre - En desarrollo]");
-        Console.ReadKey();
-    }
-
-    static void ResumenEstadistico()
-    {
-        Console.WriteLine("\n[Funcion ResumenEstadistico - En desarrollo]");
-        Console.ReadKey();
-    }
     static bool EsNumerico(string texto)
     {
      for (int i = 0; i < texto.Length; i++)
@@ -325,349 +326,7 @@ static void SubmenuInventario()
      return true;
     }
     
-
-
-    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
