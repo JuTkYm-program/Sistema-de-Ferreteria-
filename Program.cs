@@ -253,8 +253,25 @@ static void SubmenuInventario()
                     }
                 }
             }
-            
+            for (int i = 0; i < totalProductos; i++)
+            {
+                Console.WriteLine($"Producto {i + 1}");
+                Console.WriteLine($"Codigo: {codigosProd[i]}");
+                Console.WriteLine($"Nombre: {nombresProd[i]}");
+                Console.WriteLine($"Stock: {stocksProd[i]}");
+                Console.WriteLine($"Precio: S/ {preciosProd[i]}");
+                Console.WriteLine($"-----------------------------------------");
+            }
+
+            Console.WriteLine($"Total de productos registrados: {totalProductos}");
         }
+
+        Console.WriteLine();
+        Console.WriteLine($"Presione cualquier tecla para volver...");
+        Console.ReadKey();
+    }
+
+        
 
     static void BuscarProductoPorCodigo()
     {
