@@ -218,9 +218,43 @@ static void SubmenuInventario()
 
     static void VerInventario()
     {
-        Console.WriteLine("\n[Funcion VerInventario - En desarrollo]");
-        Console.ReadKey();
-    }
+        Console.Clear();
+        Console.WriteLine($"=========================================");
+        Console.WriteLine($"   INVENTARIO COMPLETO - FERRETERIA      ");
+        Console.WriteLine($"=========================================");
+        if (totalProductos == 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"No hay productos registrados todavia.");
+        }
+        else
+        {
+            for (int pasada = 0; pasada < totalProductos - 1; pasada++)
+            {
+                for (int i = 0; i < totalProductos - 1 - pasada; i++)
+                {
+                    if (string.Compare(nombresProd[i], nombresProd[i + 1]) > 0)
+                    {
+                        string tempCodigo = codigosProd[i];
+                        codigosProd[i] = codigosProd[i + 1];
+                        codigosProd[i + 1] = tempCodigo;
+
+                        string tempNombre = nombresProd[i];
+                        nombresProd[i] = nombresProd[i + 1];
+                        nombresProd[i + 1] = tempNombre;
+
+                        int tempStock = stocksProd[i];
+                        stocksProd[i] = stocksProd[i + 1];
+                        stocksProd[i + 1] = tempStock;
+
+                        double tempPrecio = preciosProd[i];
+                        preciosProd[i] = preciosProd[i + 1];
+                        preciosProd[i + 1] = tempPrecio;
+                    }
+                }
+            }
+            
+        }
 
     static void BuscarProductoPorCodigo()
     {
