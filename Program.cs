@@ -2,6 +2,15 @@
 
 class Sistema 
 {
+    
+static string[] codigos = new string[100];
+static string[] documentos = new string[100];
+static string[] detalles = new string[100];
+static int[] cantidades = new int[100];
+static string[] estados = new string[100];
+
+static int totalSolicitudes = 0;
+
     static void Main(string[] args)
     {
       bool Salir = false;
@@ -66,6 +75,11 @@ class Sistema
             case "1": RegistrarCliente(); break;
             case "2": VerClientes(); break;
             case "3": BuscarClientes(); break;
+            case "4": break;
+            default:
+            Console.WriteLine("Opcion invalida.");
+            Console.ReadKey();
+            break;
         }
     }
 
@@ -107,6 +121,11 @@ static void SubmenuInventario()
             case "2": VerInventario(); break;
             case "3": BuscarProductoPorCodigo(); break;
             case "4": ModificarStockProducto(); break;
+            case "5": break;
+            default:
+            Console.WriteLine("Opcion invalida.");
+            Console.ReadKey();
+            break;
         }
     }
 
@@ -137,7 +156,7 @@ static void SubmenuInventario()
    
     // MODULO 3 TRAMITES y PEDIDOS 
    
-     static void SubmenuTramites()
+   static void SubmenuTramites()
     {
         bool volver = false;
 
@@ -162,7 +181,7 @@ static void SubmenuInventario()
         case "5": volver = true; break;
         default:
             Console.WriteLine("Opcion invalidad,Presione cualquier tecla");
-            Console.Readkey();
+            Console.ReadKey();
             break;
        }
     }
@@ -171,7 +190,7 @@ static void SubmenuInventario()
 static void RegistrarSolicitud()
     {
         Console.Clear();
-        Console.WriteLine("--- REGISTRAR NUEVA SOLICITUD ---");
+        Console.WriteLine("REGISTRAR NUEVA SOLICITUD");
 
         if (totalSolicitudes >= 100)
         {
@@ -253,52 +272,109 @@ static void RegistrarSolicitud()
 
         totalSolicitudes++; // Aumentar contador
 
-        Console.WriteLine("\n¡Solicitud registrada con éxito!");
+        Console.WriteLine("¡Solicitud registrada con éxito!");
         Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
 
-    static void VerSolicitudes()
+   
+static void VerSolicitudes()
+{
+    Console.Clear();
+    Console.WriteLine("LISTA DE SOLICITUDES");
+
+    if (totalSolicitudes == 0)
+    {
+        Console.WriteLine("No hay solicitudes registradas.");
+    }
+    else
+    {
+        for (int i = 0; i < totalSolicitudes; i++)
+        {
+            Console.WriteLine("Codigo:   " + codigos[i]);
+            Console.WriteLine("Cliente:  " + documentos[i]);
+            Console.WriteLine("Detalle:  " + detalles[i]);
+            Console.WriteLine("Cantidad: " + cantidades[i]);
+            Console.WriteLine("Estado:   " + estados[i]);
+        }
+    }
+
+    Console.WriteLine("Presione cualquier tecla para continuar...");
+    Console.ReadKey();
+}
+
+
+ static void BuscarSolicitudPorCodigo()
     {
         Console.Clear();
-        Console.WriteLine("LISTA DE SOLICITUDES ");
+        Console.WriteLine("BUSCAR SOLICITUD");
+        Console.Write("Ingrese el codigo a buscar: ");
+        string codigoBuscado = Console.ReadLine();
 
-        if (listaSolicitudes.Count == 0)
+        if (codigoBuscado != null)
         {
-            Console.WriteLine("No hay solicitudes registradas todavía.");
+            codigoBuscado = codigoBuscado.Trim();
         }
         else
         {
-            int contador = 1;
-            foreach (var sol in listaSolicitudes)
+            codigoBuscado = "";
+        }
+
+        int indiceEncontrado = -1;
+
+        for (int i = 0; i < totalSolicitudes; i++)
+        {
+            if (codigos[i] != null && codigos[i].ToLower() == codigoBuscado.ToLower())
             {
-                Console.WriteLine($"[{contador}]");
-                Console.WriteLine($"  Codigo:   {sol.Codigo}");
-                Console.WriteLine($"  Cliente:  {sol.DocumentoCliente}");
-                Console.WriteLine($"  Detalle:  {sol.Detalle}");
-                Console.WriteLine($"  Cantidad: {sol.Cantidad}");
-                Console.WriteLine($"  Estado:   {sol.Estado}");
-                contador++;
+                indiceEncontrado = i;
+                break;
             }
+        }
+
+        if (indiceEncontrado != -1)
+        {
+            Console.WriteLine("¡Solicitud encontrada!");
+            Console.WriteLine("Codigo:   " + codigos[indiceEncontrado]);
+            Console.WriteLine("Cliente:  " + documentos[indiceEncontrado]);
+            Console.WriteLine("Detalle:  " + detalles[indiceEncontrado]);
+            Console.WriteLine("Cantidad: " + cantidades[indiceEncontrado]);
+            Console.WriteLine("Estado:   " + estados[indiceEncontrado]);
+        }
+        else
+        {
+            Console.WriteLine("No se encontró ninguna solicitud con ese código.");
         }
 
         Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
 
-    static void BuscarSolicitudPorCodigo()
+   static void ResumenSolicitudes()
     {
-        Console.WriteLine("\n[Funcion BuscarSolicitudPorCodigo - En desarrollo]");
-        Console.ReadKey();
-    }  
-    static void ResumenSolicitudes()
-    {
-        Console.WriteLine("\n[Funcion ResumenSolicitudes - En desarrollo]");
+        Console.Clear();
+        Console.WriteLine("RESUMEN DE SOLICITUDES");
+        
+        int pendientes = 0;
+        int totalUnidadesPedidos = 0;
+
+        for (int i = 0; i < totalSolicitudes; i++)
+        {
+            if (estados[i] != null && estados[i].ToLower() == "pendiente")
+            {
+                pendientes++;
+            }
+            totalUnidadesPedidos += cantidades[i];
+        }
+
+        Console.WriteLine("Total de solicitudes registradas: " + totalSolicitudes);
+        Console.WriteLine("Solicitudes pendientes:           " + pendientes);
+        Console.WriteLine("Suma total de unidades pedidas:   " + totalUnidadesPedidos);
+
+        Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
-
-
 }
+
 
 
 
