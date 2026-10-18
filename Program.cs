@@ -122,17 +122,77 @@ static void SubmenuInventario()
         Console.ReadKey();
     }
 
-    static void BuscarProductoPorCodigo()
+   // Devuelve la posicion del producto, o -1 si no existe
+static int BuscarIndicePorCodigo(string codigo)
+{
+    for (int i = 0; i < totalProductos; i++)
     {
-        Console.WriteLine("\n[Funcion BuscarProductoPorCodigo - En desarrollo]");
-        Console.ReadKey();
+        if (codigosProd[i].Equals(codigo.Trim(), StringComparison.OrdinalIgnoreCase))
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+static void BuscarProductoPorCodigo()
+{
+    Console.Clear();
+    Console.WriteLine("--- BUSCAR PRODUCTO POR CODIGO ---");
+    Console.Write("Ingrese el codigo: ");
+    string codigo = Console.ReadLine() ?? "";
+
+    int indice = BuscarIndicePorCodigo(codigo);
+
+    if (indice == -1)
+    {
+        Console.WriteLine("\nNo se encontro ningun producto con ese codigo.");
+    }
+    else
+    {
+        Console.WriteLine("\nProducto encontrado:");
+        Console.WriteLine($"Codigo: {codigosProd[indice]}");
+        Console.WriteLine($"Nombre: {nombresProd[indice]}");
+        Console.WriteLine($"Stock:  {stocksProd[indice]}");
+        Console.WriteLine($"Precio: {preciosProd[indice]}");
     }
 
-    static void ModificarStockProducto()
+    Console.WriteLine("\nPresione cualquier tecla...");
+    Console.ReadKey();
+}
+
+static void ModificarStockProducto()
+{
+    Console.Clear();
+    Console.WriteLine("--- MODIFICAR STOCK ---");
+    Console.Write("Ingrese el codigo del producto: ");
+    string codigo = Console.ReadLine() ?? "";
+
+    int indice = BuscarIndicePorCodigo(codigo);
+
+    if (indice == -1)
     {
-        Console.WriteLine("\n[Funcion ModificarStockProducto - En desarrollo]");
-        Console.ReadKey();
+        Console.WriteLine("\nNo se encontro ningun producto con ese codigo.");
     }
+    else
+    {
+        Console.WriteLine($"\n{nombresProd[indice]} - Stock actual: {stocksProd[indice]}");
+        Console.Write("Ingrese el nuevo stock: ");
+
+        if (int.TryParse(Console.ReadLine(), out int nuevoStock) && nuevoStock >= 0)
+        {
+            stocksProd[indice] = nuevoStock;
+            Console.WriteLine("Stock actualizado correctamente.");
+        }
+        else
+        {
+            Console.WriteLine("Valor invalido. El stock no se modifico.");
+        }
+    }
+
+    Console.WriteLine("\nPresione cualquier tecla...");
+    Console.ReadKey();
+}
 
    
     // MODULO 3 TRAMITES y PEDIDOS 
