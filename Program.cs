@@ -214,6 +214,7 @@ static int totalSolicitudes = 0;
     {
     }
 
+
     // MODULO 3: SOLICITUDES
     static void SubmenuSolicitudes()
     {
@@ -403,6 +404,5 @@ static void RegistrarSolicitud()
             }
         }
     }
-
    
 }
