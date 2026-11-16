@@ -17,6 +17,13 @@ class Sistema
     const string ARCHIVO_INVENTARIO = "productos.csv";
     const string ARCHIVO_SOLICITUDES = "solicitudes.csv";
 
+static string[] codigos = new string[100];
+static string[] documentos = new string[100];
+static string[] detalles = new string[100];
+static int[] cantidades = new int[100];
+static string[] estados = new string[100];
+static int totalSolicitudes = 0;
+
     static string LimpiarCampo(string texto)
     {
         return texto.Replace(SEPARADOR, ' ');
@@ -207,18 +214,14 @@ class Sistema
     {
     }
 
-
-    // =====================================================================
     // MODULO 3: SOLICITUDES
-    // =====================================================================
-
     static void SubmenuSolicitudes()
     {
         bool volver = false;
         while (!volver)
         {
             Console.Clear();
-            Console.WriteLine("--- SUBMENU: SOLICITUDES ---");
+            Console.WriteLine("SUBMENU: SOLICITUDES");
             Console.WriteLine("1. Registrar Solicitud");
             Console.WriteLine("2. Ver Solicitudes Registradas");
             Console.WriteLine("3. Buscar Solicitud por Codigo");
@@ -244,37 +247,162 @@ class Sistema
             }
         }
     }
-
-    static void RegistrarSolicitud()
+static void RegistrarSolicitud()
     {
-        Console.WriteLine("\n[Funcion RegistrarSolicitud - En desarrollo]");
+        Console.Clear();
+        Console.WriteLine("REGISTRAR NUEVA SOLICITUD");
+
+        if (totalSolicitudes >= 100)
+        {
+            Console.WriteLine("Limite de solicitudes alcanzado.");
+            Console.WriteLine("Presione cualquier tecla para continuar...");
+            Console.ReadKey();
+            return;
+        }
+
+        Console.Write("Codigo de solicitud: ");
+        string codigo = LimpiarCampo(Console.ReadLine());
+
+        Console.Write("Documento o cliente: ");
+        string documento = LimpiarCampo(Console.ReadLine());
+
+        Console.Write("Detalle de la solicitud: ");
+        string detalle = LimpiarCampo(Console.ReadLine());
+
+        Console.Write("Cantidad: ");
+        int cantidad;
+        if (int.TryParse(Console.ReadLine(), out cantidad) && cantidad > 0)
+        {
+            cantidades[totalSolicitudes] = cantidad;
+        }
+        else
+        {
+            cantidades[totalSolicitudes] = 0;
+        }
+
+        codigos[totalSolicitudes] = codigo;
+        documentos[totalSolicitudes] = documento;
+        detalles[totalSolicitudes] = detalle;
+        estados[totalSolicitudes] = "Pendiente";
+
+        totalSolicitudes++;
+        GuardarSolicitudesCSV();
+
+        Console.WriteLine("Solicitud registrada y guardada correctamente.");
+        Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
 
     static void VerSolicitudes()
     {
-        Console.WriteLine("\n[Funcion VerSolicitudes - En desarrollo]");
+        Console.Clear();
+        Console.WriteLine("LISTA DE SOLICITUDES REGISTRADAS");
+
+        if (totalSolicitudes == 0)
+        {
+            Console.WriteLine("No hay solicitudes registradas.");
+        }
+        else
+        {
+            for (int i = 0; i < totalSolicitudes; i++)
+            {
+                Console.WriteLine($"{i + 1}. Codigo: {codigos[i]} | Documento: {documentos[i]} | Detalle: {detalles[i]} | Cantidad: {cantidades[i]} | Estado: {estados[i]}");
+            }
+        }
+
+        Console.WriteLine("Presione cualquier tecla para continuar");
         Console.ReadKey();
     }
 
     static void BuscarSolicitudPorCodigo()
     {
-        Console.WriteLine("\n[Funcion BuscarSolicitudPorCodigo - En desarrollo]");
+        Console.Clear();
+        Console.WriteLine("BUSCAR SOLICITUD POR CODIGO");
+        Console.Write("Ingrese el codigo a buscar: ");
+        string codigoBuscado = Console.ReadLine();
+        bool encontrado = false;
+
+        for (int i = 0; i < totalSolicitudes; i++)
+        {
+            if (codigos[i].Equals(codigoBuscado, StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine($"Codigo: {codigos[i]}");
+                Console.WriteLine($"Documento: {documentos[i]}");
+                Console.WriteLine($"Detalle: {detalles[i]}");
+                Console.WriteLine($"Cantidad: {cantidades[i]}");
+                Console.WriteLine($"Estado: {estados[i]}");
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (!encontrado)
+        {
+            Console.WriteLine("No se encontro ninguna solicitud con ese codigo.");
+        }
+
+        Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
 
     static void ResumenSolicitudes()
     {
-        Console.WriteLine("\n[Funcion ResumenSolicitudes - En desarrollo]");
+        Console.Clear();
+        Console.WriteLine("RESUMEN DE SOLICITUDES");
+        Console.WriteLine($"Total de solicitudes registradas: {totalSolicitudes}");
+
+        int sumaUnidades = 0;
+        for (int i = 0; i < totalSolicitudes; i++)
+        {
+            sumaUnidades += cantidades[i];
+        }
+
+        Console.WriteLine($"Total de unidades solicitadas: {sumaUnidades}");
+        Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
 
-    // CSV de SOLICITUDES 
     static void CargarSolicitudesCSV()
     {
+        if (!File.Exists(ARCHIVO_SOLICITUDES))
+        {
+            return;
+        }
+
+        totalSolicitudes = 0;
+        string[] lineas = File.ReadAllLines(ARCHIVO_SOLICITUDES);
+
+        for (int i = 0; i < lineas.Length && totalSolicitudes < 100; i++)
+        {
+            if (string.IsNullOrWhiteSpace(lineas[i]))
+            {
+                continue;
+            }
+
+            string[] partes = lineas[i].Split(SEPARADOR);
+            if (partes.Length >= 5)
+            {
+                codigos[totalSolicitudes] = partes[0];
+                documentos[totalSolicitudes] = partes[1];
+                detalles[totalSolicitudes] = partes[2];
+                int.TryParse(partes[3], out cantidades[totalSolicitudes]);
+                estados[totalSolicitudes] = partes[4];
+                totalSolicitudes++;
+            }
+        }
     }
 
     static void GuardarSolicitudesCSV()
     {
+        using (StreamWriter sw = new StreamWriter(ARCHIVO_SOLICITUDES))
+        {
+            for (int i = 0; i < totalSolicitudes; i++)
+            {
+                string linea = $"{codigos[i]}{SEPARADOR}{documentos[i]}{SEPARADOR}{detalles[i]}{SEPARADOR}{cantidades[i]}{SEPARADOR}{estados[i]}";
+                sw.WriteLine(linea);
+            }
+        }
     }
+
+   
 }
