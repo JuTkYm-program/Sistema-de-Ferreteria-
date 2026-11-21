@@ -256,15 +256,25 @@ static void RegistrarSolicitud()
         if (totalSolicitudes >= 100)
         {
             Console.WriteLine("Limite de solicitudes alcanzado.");
-            Console.WriteLine("Presione cualquier tecla para continuar...");
+            Console.WriteLine("Presione cualquier tecla para continuar");
             Console.ReadKey();
             return;
         }
 
-        Console.Write("Codigo de solicitud: ");
-        string codigo = LimpiarCampo(Console.ReadLine());
+        int siguienteNumero = totalSolicitudes + 1;
+        if (totalSolicitudes > 0)
+        {
+            string ultimoCodigo = codigos[totalSolicitudes - 1];
+            if (ultimoCodigo.StartsWith("SOL-") && int.TryParse(ultimoCodigo.Substring(4), out int ultimoNum))
+            {
+                siguienteNumero = ultimoNum + 1;
+            }
+        }
+        string codigo = "SOL-" + siguienteNumero.ToString("D3");
 
-        Console.Write("Documento o cliente: ");
+        Console.WriteLine($"Codigo: {codigo}");
+
+        Console.Write("DNI o documento del cliente: ");
         string documento = LimpiarCampo(Console.ReadLine());
 
         Console.Write("Detalle de la solicitud: ");
@@ -289,7 +299,7 @@ static void RegistrarSolicitud()
         totalSolicitudes++;
         GuardarSolicitudesCSV();
 
-        Console.WriteLine("Solicitud registrada y guardada correctamente.");
+        Console.WriteLine($"Solicitud {codigo} registrada y guardada correctamente.");
         Console.WriteLine("Presione cualquier tecla para continuar...");
         Console.ReadKey();
     }
