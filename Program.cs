@@ -226,8 +226,9 @@ static int totalSolicitudes = 0;
             Console.WriteLine("1. Registrar Solicitud");
             Console.WriteLine("2. Ver Solicitudes Registradas");
             Console.WriteLine("3. Buscar Solicitud por Codigo");
-            Console.WriteLine("4. Resumen de Solicitudes");
-            Console.WriteLine("5. Volver al Menu Principal");
+            Console.WriteLine("4. Buscar Solicitud por DNI");
+            Console.WriteLine("5. Resumen de Solicitudes");
+            Console.WriteLine("6. Volver al Menu Principal");
             Console.Write("Seleccione una opcion: ");
             string op = Console.ReadLine();
 
@@ -236,8 +237,9 @@ static int totalSolicitudes = 0;
                 case "1": RegistrarSolicitud(); break;
                 case "2": VerSolicitudes(); break;
                 case "3": BuscarSolicitudPorCodigo(); break;
-                case "4": ResumenSolicitudes(); break;
-                case "5":
+                case "4": BuscarSolicitudPorDni(); break;
+                case "5": ResumenSolicitudes(); break;
+                case "6":
                     GuardarSolicitudesCSV(); // guarda al salir del módulo
                     volver = true;
                     break;
@@ -353,6 +355,36 @@ static void RegistrarSolicitud()
         }
 
         Console.WriteLine("Presione cualquier tecla para continuar...");
+        Console.ReadKey();
+    }
+
+    static void BuscarSolicitudPorDni()
+    {
+        Console.Clear();
+        Console.WriteLine("BUSCAR SOLICITUD POR DNI");
+        Console.Write("Ingrese el DNI a buscar: ");
+        string dniBuscado = Console.ReadLine();
+        bool encontrado = false;
+
+        for (int i = 0; i < totalSolicitudes; i++)
+        {
+            if (documentos[i].Equals(dniBuscado, StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine($"Codigo: {codigos[i]}");
+                Console.WriteLine($"DNI: {documentos[i]}");
+                Console.WriteLine($"Detalle: {detalles[i]}");
+                Console.WriteLine($"Cantidad: {cantidades[i]}");
+                Console.WriteLine($"Estado: {estados[i]}");
+                encontrado = true;
+            }
+        }
+
+        if (!encontrado)
+        {
+            Console.WriteLine("No se encontro ninguna solicitud asociada a ese DNI");
+        }
+
+        Console.WriteLine("Presione cualquier tecla para continuar");
         Console.ReadKey();
     }
 
