@@ -554,51 +554,51 @@ class Sistema
         }
     }
 
-    static void GuardarInventarioCSV()
+static void GuardarInventarioCSV()
+{
+    for (int pasada = 0; pasada < totalProductos - 1; pasada++)
     {
-        for (int pasada = 0; pasada < totalProductos - 1; pasada++)
+        for (int i = 0; i < totalProductos - 1 - pasada; i++)
         {
-            for (int i = 0; i < totalProductos - 1 - pasada; i++)
+            if (string.Compare(nombresProd[i].ToLower(), nombresProd[i + 1].ToLower()) > 0)
             {
-                if (string.Compare(nombresProd[i].ToLower(), nombresProd[i + 1].ToLower()) > 0)
-                {
-                    string tempCodigo = codigosProd[i];
-                    codigosProd[i] = codigosProd[i + 1];
-                    codigosProd[i + 1] = tempCodigo;
+                string tempCodigo = codigosProd[i];
+                codigosProd[i] = codigosProd[i + 1];
+                codigosProd[i + 1] = tempCodigo;
 
-                    string tempNombre = nombresProd[i];
-                    nombresProd[i] = nombresProd[i + 1];
-                    nombresProd[i + 1] = tempNombre;
+                string tempNombre = nombresProd[i];
+                nombresProd[i] = nombresProd[i + 1];
+                nombresProd[i + 1] = tempNombre;
 
-                    int tempStock = stocksProd[i];
-                    stocksProd[i] = stocksProd[i + 1];
-                    stocksProd[i + 1] = tempStock;
+                int tempStock = stocksProd[i];
+                stocksProd[i] = stocksProd[i + 1];
+                stocksProd[i + 1] = tempStock;
 
-                    double tempPrecio = preciosProd[i];
-                    preciosProd[i] = preciosProd[i + 1];
-                    preciosProd[i + 1] = tempPrecio;
-                }
+                double tempPrecio = preciosProd[i];
+                preciosProd[i] = preciosProd[i + 1];
+                preciosProd[i + 1] = tempPrecio;
             }
-        }
-
-        try
-        {
-            using (var archivo = new StreamWriter(ARCHIVO_INVENTARIO))
-            {
-                for (int i = 0; i < totalProductos; i++)
-                {
-                    archivo.WriteLine($"{codigosProd[i]}{SEPARADOR}{LimpiarCampo(nombresProd[i])}{SEPARADOR}{stocksProd[i]}{SEPARADOR}{preciosProd[i]:F2}");
-                }
-            }
-            Console.WriteLine($"Inventario guardado en: {Path.GetFullPath(ARCHIVO_INVENTARIO)}");
-        }
-        catch (Exception)
-        {
-            Console.WriteLine("No se pudo guardar " + ARCHIVO_INVENTARIO + ". Cierre el archivo si lo tiene abierto.");
-            Console.WriteLine("Presione una tecla para continuar...");
-            Console.ReadKey();
         }
     }
+
+    try
+    {
+        using (var archivo = new StreamWriter(ARCHIVO_INVENTARIO))
+        {
+            for (int i = 0; i < totalProductos; i++)
+            {
+                archivo.WriteLine($"{codigosProd[i]}{SEPARADOR}{LimpiarCampo(nombresProd[i])}{SEPARADOR}{stocksProd[i]}{SEPARADOR}{preciosProd[i].ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}");
+            }
+        }
+        Console.WriteLine($"Inventario guardado en: {Path.GetFullPath(ARCHIVO_INVENTARIO)}");
+    }
+    catch (Exception)
+    {
+        Console.WriteLine("No se pudo guardar " + ARCHIVO_INVENTARIO + ". Cierre el archivo si lo tiene abierto.");
+        Console.WriteLine("Presione una tecla para continuar...");
+        Console.ReadKey();
+    }
+}
 
 
     // MODULO 3 SOLICITUDES
