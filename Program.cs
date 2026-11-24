@@ -365,32 +365,76 @@ class Sistema
         return -1;
     }
 
-    static void BuscarProductoPorCodigo()
+        // Verifica que el codigo tenga exactamente 5 digitos y solo numeros
+    static bool EsCodigoValido(string codigo)
     {
-        Console.Clear();
-        Console.WriteLine("--- BUSCAR PRODUCTO POR CODIGO ---");
-        Console.Write("Ingrese el codigo: ");
-        string codigo = Console.ReadLine() ?? "";
-
-        int indice = BuscarIndicePorCodigo(codigo);
-
-        if (indice == -1)
+        if (codigo.Length != 5)
         {
-            Console.WriteLine("\nNo se encontro ningun producto con ese codigo.");
+            return false;
         }
-        else
+        foreach (char c in codigo)
         {
-            Console.WriteLine("\nProducto encontrado:");
-            Console.WriteLine($"Codigo: {codigosProd[indice]}");
-            Console.WriteLine($"Nombre: {nombresProd[indice]}");
-            Console.WriteLine($"Stock:  {stocksProd[indice]}");
-            Console.WriteLine($"Precio: S/ {preciosProd[indice]:F2}");
+            if (!char.IsDigit(c))
+            {
+                return false;
+            }
         }
-
-        Console.WriteLine("\nPresione cualquier tecla...");
-        Console.ReadKey();
+        return true;
     }
 
+    static void BuscarProductoPorCodigo()
+    {
+        if (totalProductos == 0)
+        {
+            Console.Clear();
+            Console.WriteLine("--- BUSCAR PRODUCTO POR CODIGO ---");
+            Console.WriteLine("\nNo hay productos registrados todavia.");
+            Console.WriteLine("\nPresione cualquier tecla para volver...");
+            Console.ReadKey();
+            return;
+        }
+
+        string otraBusqueda;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("--- BUSCAR PRODUCTO POR CODIGO ---");
+            Console.Write("Ingrese el codigo (5 digitos): ");
+            string codigo = (Console.ReadLine() ?? "").Trim();
+
+            if (!EsCodigoValido(codigo))
+            {
+                Console.WriteLine("\nEl codigo debe tener exactamente 5 digitos y solo numeros.");
+            }
+            else
+            {
+                int indice = BuscarIndicePorCodigo(codigo);
+
+                if (indice == -1)
+                {
+                    Console.WriteLine($"\nNo se encontro ningun producto con el codigo {codigo}.");
+                }
+                else
+                {
+                    Console.WriteLine("\nProducto encontrado:");
+                    Console.WriteLine("-----------------------------------------");
+                    Console.WriteLine($"Codigo: {codigosProd[indice]}");
+                    Console.WriteLine($"Nombre: {nombresProd[indice]}");
+                    Console.WriteLine($"Stock:  {stocksProd[indice]}");
+                    Console.WriteLine($"Precio: S/ {preciosProd[indice]:F2}");
+                    Console.WriteLine("-----------------------------------------");
+
+                    if (stocksProd[indice] == 0)
+                    {
+                        Console.WriteLine("Aviso: este producto no tiene stock.");
+                    }
+                }
+            }
+
+            Console.Write("\nDesea buscar otro producto? (S/N): ");
+            otraBusqueda = (Console.ReadLine() ?? "").Trim().ToUpper();
+        } while (otraBusqueda == "S");
+    }
     static void ModificarStockProducto()
     {
         Console.Clear();
