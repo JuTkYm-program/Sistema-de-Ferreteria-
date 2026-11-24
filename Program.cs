@@ -277,7 +277,7 @@ class Sistema
         {
            Console.Write($"Precio unitario:");
            preciotext = Console.ReadLine().Trim();
-           precioValido = double.TryParse(preciotext, out precio);
+           precioValido = double.TryParse(preciotext.Replace(',', '.'), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out precio);
 
            if (preciotext == "")
            {
@@ -379,11 +379,46 @@ class Sistema
      // CSV de INVENTARIO 
 
      // Lee el archivo Inventario.csv y llena los arreglos.
-   static void CargarInventarioCSV()
+    static void CargarInventarioCSV()
     {
-        
-    }
+        totalProductos=0;
+        if (File.Exists(ARCHIVO_INVENTARIO))
+        {
+            try
+            {
+                using (var archivo = new StreamReader(ARCHIVO_INVENTARIO))
+                {
+                    string linea;
+                    while ((linea = archivo.ReadLine()) != null)
+                    {
+                        string[] partes = linea.Split(SEPARADOR);
+                        int stock;
+                        double precio;
 
+                        if (partes.Length == 4
+                            && int.TryParse(partes[2], out stock)
+                            && double.TryParse(partes[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out precio)
+                            && totalProductos < MAX_PRODUCTOS)
+                        {
+                            codigosProd[totalProductos] = partes[0];
+                            nombresProd[totalProductos] = partes[1];
+                            stocksProd[totalProductos] = stock;
+                            preciosProd[totalProductos] = precio;
+                            totalProductos++;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("No se pudo leer " + ARCHIVO_INVENTARIO + ". Cierre el archivo si lo tiene abierto.");
+                Console.WriteLine("Presione una tecla para continuar...");
+                Console.ReadKey();
+                totalProductos = 0;
+            }
+        }
+    }
+    
     // Escribe productos.csv con una línea por producto (sobreescribe el archivo)
     static void GuardarInventarioCSV()
     {
