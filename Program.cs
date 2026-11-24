@@ -1,17 +1,24 @@
 ﻿using System;
 using System.IO; // Agregamos la Librería para leer y escribir archivos CSV
 
-class Sistema
+
+class Sistema 
 {
-    
- // =====================================================================
+    //Arreglos para el inventario
+    const int MAX_PRODUCTOS = 100;
+    static string[] codigosProd = new string[MAX_PRODUCTOS];
+    static string[] nombresProd = new string[MAX_PRODUCTOS];
+    static int[] stocksProd = new int[MAX_PRODUCTOS];
+    static double[] preciosProd = new double[MAX_PRODUCTOS];
+    static int totalProductos = 0;
+     // =====================================================================
  // VARIABLES GLOBALES PARA ARCHIVOS CSV (USO OBLIGATORIO PARA TODOS)
  // - No cambien los nombres de los archivos aquí.
  // - Usen la constante 'SEPARADOR' (',') en sus funciones de guardar/leer.
  // - IMPORTANTE: Antes de guardar textos largos (nombres, detalles), 
  //   pásenlos por la función LimpiarCampo(texto) para que el CSV no se rompa.
  // =====================================================================
-
+    
     const char SEPARADOR = ',';
     const string ARCHIVO_CLIENTES = "clientes.csv";
     const string ARCHIVO_INVENTARIO = "productos.csv";
@@ -21,8 +28,6 @@ class Sistema
     {
         return texto.Replace(SEPARADOR, ' ');
     }
-
-
     static void Main(string[] args)
     {
         // 1- CARGA INICIAL DE DATOS.
@@ -72,11 +77,10 @@ class Sistema
     }
 
 
-    // =====================================================================
-    // MODULO 1: CLIENTES
-    // =====================================================================
 
-    static void SubmenuClientes()
+    // MODULO 1 CLIENTE 
+
+   static void SubmenuClientes()
     {
         bool volver = false;
         while (!volver)
@@ -107,7 +111,8 @@ class Sistema
         }
     }
 
-    static void RegistrarCliente()
+
+   static void RegistrarCliente()
     {
         Console.WriteLine("\n[Funcion RegistrarCliente - En desarrollo]");
         Console.ReadKey();
@@ -125,6 +130,7 @@ class Sistema
         Console.ReadKey();
     }
 
+    
     // CSV de CLIENTES 
     // Cargar: si File.Exists(ARCHIVO_CLIENTES), leer con File.ReadAllLines y llenar los arreglos.
     // Guardar: escribir una línea por cliente con File.WriteAllLines.
@@ -137,141 +143,372 @@ class Sistema
     }
 
 
-    // =====================================================================
-    // MODULO 2: INVENTARIO
-    // =====================================================================
 
-    static void SubmenuInventario()
+    // MODULO 2: INVENTARIO 
+
+   static void SubmenuInventario()
     {
         bool volver = false;
         while (!volver)
         {
-            Console.Clear();
-            Console.WriteLine("--- SUBMENU: GESTION DE INVENTARIO ---");
-            Console.WriteLine("1. Registrar Producto");
-            Console.WriteLine("2. Ver Inventario Completo");
-            Console.WriteLine("3. Buscar Producto por Codigo");
-            Console.WriteLine("4. Modificar Stock");
-            Console.WriteLine("5. Volver al Menu Principal");
-            Console.Write("Seleccione una opcion: ");
-            string op = Console.ReadLine();
+         Console.Clear();
+         Console.WriteLine("--- SUBMENU: GESTION DE INVENTARIO ---");
+         Console.WriteLine("1. Registrar Producto");
+         Console.WriteLine("2. Ver Inventario Completo");
+         Console.WriteLine("3. Buscar Producto por Codigo");
+         Console.WriteLine("4. Modificar Stock");
+         Console.WriteLine("5. Volver al Menu Principal");
+         Console.Write("Seleccione una opcion: ");
+         string op = Console.ReadLine();
 
-            switch (op)
-            {
-                case "1": RegistrarProducto(); break;
-                case "2": VerInventario(); break;
-                case "3": BuscarProductoPorCodigo(); break;
-                case "4": ModificarStockProducto(); break;
-                case "5":
-                    GuardarInventarioCSV(); // guarda al salir del módulo
-                    volver = true;
-                    break;
-                default:
-                    Console.WriteLine("Opcion no valida. Presione una tecla...");
-                    Console.ReadKey();
-                    break;
-            }
+         switch (op)
+         {
+            case "1": RegistrarProducto(); break;
+            case "2": VerInventario(); break;
+            case "3": BuscarProductoPorCodigo(); break;
+            case "4": ModificarStockProducto(); break;
+            case "5":
+                GuardarInventarioCSV(); // guarda al salir del módulo
+                volver = true;
+                break;
+            default:
+                Console.WriteLine("Opcion no valida. Presione una tecla...");
+                Console.ReadKey();
+                break;
+         }
         }
     }
 
+
     static void RegistrarProducto()
     {
-        Console.WriteLine("\n[Funcion RegistrarProducto - En desarrollo]");
-        Console.ReadKey();
+        Console.Clear();
+        Console.WriteLine("--------REGISTRAR PRODUCTO----------");
+        if (totalProductos==MAX_PRODUCTOS)
+        {   
+            Console.WriteLine();
+            Console.WriteLine($"El inventario está lleno, no se puede registrar más.");
+            Console.ReadKey();
+            return;
+            
+        }
+        
+        Console.Write($"Codigo del producto(5 dígitos):");
+        string codigo = Console.ReadLine().Trim();
+
+        //Revisamos que el código solo contenga números
+        bool soloNumeros = true;
+        for (int i=0;i<codigo.Length;i++)
+        {
+            if (!char.IsDigit(codigo[i]))
+            {
+                 soloNumeros=false;
+            }
+        }
+        if (codigo.Length!=5 || !soloNumeros)
+        {
+            Console.WriteLine($"El codigo debe tener exactamente 5 digitos y solo numeros.");
+            Console.ReadKey();
+            return;
+        }
+        //Revisamos que el codigo del producto no se repita  
+        bool repetido = false;
+        for (int i=0;i<totalProductos;i++)
+        {
+            if (codigosProd[i]==codigo)
+            {
+                repetido=true;
+            }
+        }
+         if (repetido)
+        {
+            Console.WriteLine($"Ya existe un producto con ese codigo.");
+            Console.ReadKey();
+            return;
+        }
+ 
+        Console.Write("Nombre del producto:");
+        string nombre = LimpiarCampo(Console.ReadLine().Trim());
+        //Verificamos que el nombre no puede estar vacìo
+         if (nombre=="")
+        {
+            Console.WriteLine();
+            Console.WriteLine($"El nombre no puede estar vacío");
+            Console.ReadKey();
+            return;
+        }     
+        int stock;
+        string stockText;
+        bool stockValido;
+        do
+        {
+          Console.Write("Stock inicial:");
+          stockText = Console.ReadLine().Trim();
+          stockValido = int.TryParse(stockText, out stock);
+          if (stockText == "")
+          {
+            Console.WriteLine($"Escriba el stock del producto");
+          }
+          else if (!stockValido)
+          {
+            Console.WriteLine($"El stock debe ser un numero entero");
+          }
+          else if (stock < 0)
+          {
+            Console.WriteLine($"El stock no puede ser negativo");
+          }
+        } while (!stockValido || stock < 0);
+
+        double precio;
+        string preciotext;
+        bool precioValido;
+        do
+        {
+           Console.Write($"Precio unitario:");
+           preciotext = Console.ReadLine().Trim();
+           precioValido = double.TryParse(preciotext, out precio);
+
+           if (preciotext == "")
+           {
+            
+            Console.WriteLine($"Escriba el precio del producto");
+           }
+
+            else if (!precioValido)
+            {
+                Console.WriteLine($"El precio debe ser un numero valido");
+            }
+            else if (precio < 0)
+            {
+                Console.WriteLine($"El precio no puede ser negativo");
+            }
+        } while (!precioValido || precio < 0);
+        
+        codigosProd[totalProductos]=codigo;
+        nombresProd[totalProductos]=nombre;
+        stocksProd[totalProductos]=stock;
+        preciosProd[totalProductos]=precio;
+        totalProductos++;
+        GuardarInventarioCSV();
+        Console.WriteLine($"Producto registrado correctamente.");
     }
 
     static void VerInventario()
     {
-        Console.WriteLine("\n[Funcion VerInventario - En desarrollo]");
+        Console.Clear();
+        Console.WriteLine($"=========================================");
+        Console.WriteLine($"   INVENTARIO COMPLETO - FERRETERIA      ");
+        Console.WriteLine($"=========================================");
+        if (totalProductos == 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"No hay productos registrados todavia.");
+            Console.WriteLine();
+            Console.WriteLine($"Presione cualquier tecla para volver...");
+            Console.ReadKey();
+            return;
+        }
+
+        
+        for (int pasada = 0; pasada < totalProductos - 1; pasada++)
+        {
+            for (int i = 0; i < totalProductos - 1 - pasada; i++)
+            {
+                if (string.Compare(nombresProd[i].ToLower(), nombresProd[i + 1].ToLower()) > 0)
+                {
+                    string tempCodigo = codigosProd[i];
+                    codigosProd[i] = codigosProd[i + 1];
+                    codigosProd[i + 1] = tempCodigo;
+
+                    string tempNombre = nombresProd[i];
+                    nombresProd[i] = nombresProd[i + 1];
+                    nombresProd[i + 1] = tempNombre;
+
+                    int tempStock = stocksProd[i];
+                    stocksProd[i] = stocksProd[i + 1];
+                    stocksProd[i + 1] = tempStock;
+
+                    double tempPrecio = preciosProd[i];
+                    preciosProd[i] = preciosProd[i + 1];
+                    preciosProd[i + 1] = tempPrecio;
+                }
+            }
+        }
+        for (int i = 0; i < totalProductos; i++)
+        {
+            Console.WriteLine($"Producto {i + 1}");
+            Console.WriteLine($"Codigo: {codigosProd[i]}");
+             Console.WriteLine($"Nombre: {nombresProd[i]}");
+            Console.WriteLine($"Stock: {stocksProd[i]}");
+            Console.WriteLine($"Precio: S/ {preciosProd[i]:F2}");
+            Console.WriteLine($"-----------------------------------------");
+        }
+
+        Console.WriteLine($"Total de productos registrados: {totalProductos}");
+        Console.WriteLine();
+        Console.WriteLine($"Presione cualquier tecla para volver...");
         Console.ReadKey();
     }
 
-   // Devuelve la posicion del producto, o -1 si no existe
-static int BuscarIndicePorCodigo(string codigo)
-{
-    for (int i = 0; i < totalProductos; i++)
+        
+
+    // Devuelve la posicion del producto, o -1 si no existe
+    static int BuscarIndicePorCodigo(string codigo)
     {
-        if (codigosProd[i].Equals(codigo.Trim(), StringComparison.OrdinalIgnoreCase))
+        for (int i = 0; i < totalProductos; i++)
         {
-            return i;
+            if (codigosProd[i].Equals(codigo.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                return i;
+            }
         }
-    }
-    return -1;
-}
-
-static void BuscarProductoPorCodigo()
-{
-    Console.Clear();
-    Console.WriteLine("--- BUSCAR PRODUCTO POR CODIGO ---");
-    Console.Write("Ingrese el codigo: ");
-    string codigo = Console.ReadLine() ?? "";
-
-    int indice = BuscarIndicePorCodigo(codigo);
-
-    if (indice == -1)
-    {
-        Console.WriteLine("\nNo se encontro ningun producto con ese codigo.");
-    }
-    else
-    {
-        Console.WriteLine("\nProducto encontrado:");
-        Console.WriteLine($"Codigo: {codigosProd[indice]}");
-        Console.WriteLine($"Nombre: {nombresProd[indice]}");
-        Console.WriteLine($"Stock:  {stocksProd[indice]}");
-        Console.WriteLine($"Precio: {preciosProd[indice]}");
+        return -1;
     }
 
-    Console.WriteLine("\nPresione cualquier tecla...");
-    Console.ReadKey();
-}
-
-static void ModificarStockProducto()
-{
-    Console.Clear();
-    Console.WriteLine("--- MODIFICAR STOCK ---");
-    Console.Write("Ingrese el codigo del producto: ");
-    string codigo = Console.ReadLine() ?? "";
-
-    int indice = BuscarIndicePorCodigo(codigo);
-
-    if (indice == -1)
+    static void BuscarProductoPorCodigo()
     {
-        Console.WriteLine("\nNo se encontro ningun producto con ese codigo.");
-    }
-    else
-    {
-        Console.WriteLine($"\n{nombresProd[indice]} - Stock actual: {stocksProd[indice]}");
-        Console.Write("Ingrese el nuevo stock: ");
+        Console.Clear();
+        Console.WriteLine("--- BUSCAR PRODUCTO POR CODIGO ---");
+        Console.Write("Ingrese el codigo: ");
+        string codigo = Console.ReadLine() ?? "";
 
-        if (int.TryParse(Console.ReadLine(), out int nuevoStock) && nuevoStock >= 0)
+        int indice = BuscarIndicePorCodigo(codigo);
+
+        if (indice == -1)
         {
-            stocksProd[indice] = nuevoStock;
-            Console.WriteLine("Stock actualizado correctamente.");
+            Console.WriteLine("\nNo se encontro ningun producto con ese codigo.");
         }
         else
         {
-            Console.WriteLine("Valor invalido. El stock no se modifico.");
+            Console.WriteLine("\nProducto encontrado:");
+            Console.WriteLine($"Codigo: {codigosProd[indice]}");
+            Console.WriteLine($"Nombre: {nombresProd[indice]}");
+            Console.WriteLine($"Stock:  {stocksProd[indice]}");
+            Console.WriteLine($"Precio: S/ {preciosProd[indice]:F2}");
         }
+
+        Console.WriteLine("\nPresione cualquier tecla...");
+        Console.ReadKey();
     }
 
-    Console.WriteLine("\nPresione cualquier tecla...");
-    Console.ReadKey();
-}
+    static void ModificarStockProducto()
+    {
+        Console.Clear();
+        Console.WriteLine("--- MODIFICAR STOCK ---");
+        Console.Write("Ingrese el codigo del producto: ");
+        string codigo = Console.ReadLine() ?? "";
 
-    // CSV de INVENTARIO 
+        int indice = BuscarIndicePorCodigo(codigo);
+
+        if (indice == -1)
+        {
+            Console.WriteLine("\nNo se encontro ningun producto con ese codigo.");
+        }
+        else
+        {
+            Console.WriteLine($"\n{nombresProd[indice]} - Stock actual: {stocksProd[indice]}");
+            Console.Write("Ingrese el nuevo stock: ");
+
+            if (int.TryParse(Console.ReadLine(), out int nuevoStock) && nuevoStock >= 0)
+            {
+                stocksProd[indice] = nuevoStock;
+                GuardarInventarioCSV(); // guarda el cambio en productos.csv
+                Console.WriteLine("Stock actualizado correctamente.");
+            }
+            else
+            {
+                Console.WriteLine("Valor invalido. El stock no se modifico.");
+            }
+        }
+
+        Console.WriteLine("\nPresione cualquier tecla...");
+        Console.ReadKey();
+    }
+
+     // CSV de INVENTARIO 
     static void CargarInventarioCSV()
     {
+        totalProductos = 0;
+
+        if (!File.Exists(ARCHIVO_INVENTARIO))
+        {
+            return;
+        }
+
+        using (var archivo = new StreamReader(ARCHIVO_INVENTARIO))
+        {
+            string linea = archivo.ReadLine();
+            while (linea != null)
+            {
+                string[] partes = linea.Split(SEPARADOR);
+                int stock;
+                double precio;
+
+                if (partes.Length == 4
+                    && int.TryParse(partes[2], out stock)
+                    && double.TryParse(partes[3], out precio)
+                    && totalProductos < MAX_PRODUCTOS)
+                {
+                    codigosProd[totalProductos] = partes[0];
+                    nombresProd[totalProductos] = partes[1];
+                    stocksProd[totalProductos] = stock;
+                    preciosProd[totalProductos] = precio;
+                    totalProductos++;
+                }
+                linea = archivo.ReadLine();
+            }
+        }
     }
 
     static void GuardarInventarioCSV()
     {
+        for (int pasada = 0; pasada < totalProductos - 1; pasada++)
+        {
+            for (int i = 0; i < totalProductos - 1 - pasada; i++)
+            {
+                if (string.Compare(nombresProd[i].ToLower(), nombresProd[i + 1].ToLower()) > 0)
+                {
+                    string tempCodigo = codigosProd[i];
+                    codigosProd[i] = codigosProd[i + 1];
+                    codigosProd[i + 1] = tempCodigo;
+
+                    string tempNombre = nombresProd[i];
+                    nombresProd[i] = nombresProd[i + 1];
+                    nombresProd[i + 1] = tempNombre;
+
+                    int tempStock = stocksProd[i];
+                    stocksProd[i] = stocksProd[i + 1];
+                    stocksProd[i + 1] = tempStock;
+
+                    double tempPrecio = preciosProd[i];
+                    preciosProd[i] = preciosProd[i + 1];
+                    preciosProd[i + 1] = tempPrecio;
+                }
+            }
+        }
+
+        try
+        {
+            using (var archivo = new StreamWriter(ARCHIVO_INVENTARIO))
+            {
+                for (int i = 0; i < totalProductos; i++)
+                {
+                    archivo.WriteLine($"{codigosProd[i]}{SEPARADOR}{LimpiarCampo(nombresProd[i])}{SEPARADOR}{stocksProd[i]}{SEPARADOR}{preciosProd[i]:F2}");
+                }
+            }
+            Console.WriteLine($"Inventario guardado en: {Path.GetFullPath(ARCHIVO_INVENTARIO)}");
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("No se pudo guardar " + ARCHIVO_INVENTARIO + ". Cierre el archivo si lo tiene abierto.");
+            Console.WriteLine("Presione una tecla para continuar...");
+            Console.ReadKey();
+        }
     }
 
 
-    // =====================================================================
-    // MODULO 3: SOLICITUDES
-    // =====================================================================
-
+    // MODULO 3 SOLICITUDES
+   
     static void SubmenuSolicitudes()
     {
         bool volver = false;
@@ -321,8 +558,7 @@ static void ModificarStockProducto()
     {
         Console.WriteLine("\n[Funcion BuscarSolicitudPorCodigo - En desarrollo]");
         Console.ReadKey();
-    }
-
+    }  
     static void ResumenSolicitudes()
     {
         Console.WriteLine("\n[Funcion ResumenSolicitudes - En desarrollo]");
@@ -336,5 +572,5 @@ static void ModificarStockProducto()
 
     static void GuardarSolicitudesCSV()
     {
-    }
+    }   
 }
