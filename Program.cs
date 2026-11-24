@@ -435,37 +435,87 @@ class Sistema
             otraBusqueda = (Console.ReadLine() ?? "").Trim().ToUpper();
         } while (otraBusqueda == "S");
     }
-    static void ModificarStockProducto()
+        static void ModificarStockProducto()
     {
         Console.Clear();
         Console.WriteLine("--- MODIFICAR STOCK ---");
-        Console.Write("Ingrese el codigo del producto: ");
-        string codigo = Console.ReadLine() ?? "";
+
+        if (totalProductos == 0)
+        {
+            Console.WriteLine("\nNo hay productos registrados todavia.");
+            Console.WriteLine("\nPresione cualquier tecla para volver...");
+            Console.ReadKey();
+            return;
+        }
+
+        Console.Write("Ingrese el codigo del producto (5 digitos): ");
+        string codigo = (Console.ReadLine() ?? "").Trim();
+
+        if (!EsCodigoValido(codigo))
+        {
+            Console.WriteLine("\nEl codigo debe tener exactamente 5 digitos y solo numeros.");
+            Console.ReadKey();
+            return;
+        }
 
         int indice = BuscarIndicePorCodigo(codigo);
 
         if (indice == -1)
         {
-            Console.WriteLine("\nNo se encontro ningun producto con ese codigo.");
+            Console.WriteLine($"\nNo se encontro ningun producto con el codigo {codigo}.");
+            Console.ReadKey();
+            return;
         }
-        else
+
+        string nombre = nombresProd[indice];
+        int stockAnterior = stocksProd[indice];
+
+        Console.WriteLine($"\nProducto: {nombre}");
+        Console.WriteLine($"Stock actual: {stockAnterior}");
+
+        int nuevoStock;
+        string texto;
+        bool valido;
+        do
         {
-            Console.WriteLine($"\n{nombresProd[indice]} - Stock actual: {stocksProd[indice]}");
-            Console.Write("Ingrese el nuevo stock: ");
+            Console.Write("Nuevo stock: ");
+            texto = (Console.ReadLine() ?? "").Trim();
+            valido = int.TryParse(texto, out nuevoStock);
 
-            if (int.TryParse(Console.ReadLine(), out int nuevoStock) && nuevoStock >= 0)
+            if (texto == "")
             {
-                stocksProd[indice] = nuevoStock;
-                GuardarInventarioCSV(); // guarda el cambio en productos.csv
-                Console.WriteLine("Stock actualizado correctamente.");
+                Console.WriteLine("Escriba el nuevo stock.");
             }
-            else
+            else if (!valido)
             {
-                Console.WriteLine("Valor invalido. El stock no se modifico.");
+                Console.WriteLine("El stock debe ser un numero entero.");
             }
+            else if (nuevoStock < 0)
+            {
+                Console.WriteLine("El stock no puede ser negativo.");
+            }
+        } while (!valido || nuevoStock < 0);
+
+        if (nuevoStock == stockAnterior)
+        {
+            Console.WriteLine("\nEl stock es el mismo, no se realizo ningun cambio.");
+            Console.ReadKey();
+            return;
         }
 
-        Console.WriteLine("\nPresione cualquier tecla...");
+        Console.Write($"\nCambiar el stock de {stockAnterior} a {nuevoStock}? (S/N): ");
+        string confirmar = (Console.ReadLine() ?? "").Trim().ToUpper();
+
+        if (confirmar != "S")
+        {
+            Console.WriteLine("Cambio cancelado.");
+            Console.ReadKey();
+            return;
+        }
+
+        stocksProd[indice] = nuevoStock;
+        GuardarInventarioCSV();
+        Console.WriteLine($"Stock de {nombre} actualizado: {stockAnterior} -> {nuevoStock}");
         Console.ReadKey();
     }
 
